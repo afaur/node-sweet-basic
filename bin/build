@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on error
-set -o errexit
+#set -o errexit
 
 # Take all macros and put them into one file in lib/
 cat ./lib/macros/*.js > ./lib/__all_macros.js
@@ -16,7 +16,23 @@ cat ./lib/__all_macros.js > ./lib/index.js
 cat ./lib/__index_backup.js >> ./lib/index.js
 
 # Compile our source to dist folder
-sjs --sourcemaps --out-dir=dist $npm_package_config_src_main
+( # Try
+  set -e
+  sjs --sourcemap -o dist/index.js $npm_package_config_src_main
+) # Catch
+test $? -gt 0 && {
+  # sjs command failed to compile
+  echo "Failed to compile project."
+
+  # Restore from backup app entry point
+  cp ./lib/__index_backup.js ./lib/index.js
+
+  # Remove intermediate files: __all_macros.js and __index_backup.js
+  rm ./lib/__all_macros.js
+  rm ./lib/__index_backup.js
+
+  exit
+}
 
 # Restore from backup app entry point
 cp ./lib/__index_backup.js ./lib/index.js
