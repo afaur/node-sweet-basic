@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Exit on error
+set -o errexit
+
+# Compile our source to dist folder
+sjs --out-dir=dist $npm_package_config_src_main
+
+# Trigger the next action
+npm run build:run
+

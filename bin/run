@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Exit on error
+set -o errexit
+
+# Compile our source to dist folder
+node $npm_package_config_dist_main
+

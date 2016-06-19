@@ -1,0 +1,21 @@
+{
+  "name": "node-sweet-basic",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "config": {
+    "src_main": "lib/index.js",
+    "dist_main": "dist/index.js"
+  },
+  "scripts": {
+    "start": "npm run build:compile",
+    "build:compile": "./bin/build",
+    "build:run": "./bin/run",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sweet.js": "^1.1.1"
+  }
+}
