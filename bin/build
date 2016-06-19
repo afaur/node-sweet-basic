@@ -3,8 +3,27 @@
 # Exit on error
 set -o errexit
 
+# Take all macros and put them into one file in lib/
+cat ./lib/macros/*.js > ./lib/__all_macros.js
+
+# Backup original app entry point
+cp ./lib/index.js ./lib/__index_backup.js
+
+# Put macros into index.js, overwriting file
+cat ./lib/__all_macros.js > ./lib/index.js
+
+# Put app entry code into index.js, appending file
+cat ./lib/__index_backup.js >> ./lib/index.js
+
 # Compile our source to dist folder
-sjs --out-dir=dist $npm_package_config_src_main
+sjs --sourcemaps --out-dir=dist $npm_package_config_src_main
+
+# Restore from backup app entry point
+cp ./lib/__index_backup.js ./lib/index.js
+
+# Remove intermediate files: __all_macros.js and __index_backup.js
+rm ./lib/__all_macros.js
+rm ./lib/__index_backup.js
 
 # Trigger the next action
 npm run build:run
